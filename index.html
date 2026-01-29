@@ -1,0 +1,3533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1a1a2e">
+    <title>TopUp Centre - Premium Game Top-Up</title>
+    <style>
+        /* ============================================
+           CSS VARIABLES & BASE STYLES
+           ============================================ */
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f0f23;
+            --darker: #0a0a1a;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-muted: rgba(255, 255, 255, 0.5);
+            --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            font-family: var(--font-main);
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 50%, #16213e 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.1) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ============================================
+           GLASS MORPHISM COMPONENTS
+           ============================================ */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* ============================================
+           BUTTONS
+           ============================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-family: var(--font-main);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        .btn-lg {
+            padding: 16px 32px;
+            font-size: 16px;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* ============================================
+           FORM ELEMENTS
+           ============================================ */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            font-size: 14px;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+        }
+
+        .form-select option {
+            background: var(--dark);
+            color: var(--text-primary);
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 26px;
+            transition: 0.3s;
+        }
+
+        .toggle-slider::before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+
+        .toggle-switch input:checked + .toggle-slider {
+            background: var(--success);
+        }
+
+        .toggle-switch input:checked + .toggle-slider::before {
+            transform: translateX(24px);
+        }
+
+        /* ============================================
+           LAYOUT & CONTAINERS
+           ============================================ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        .section {
+            display: none;
+            padding: 20px 0;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .grid-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============================================
+           HEADER & NAVIGATION
+           ============================================ */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 12px 0;
+            background: rgba(15, 15, 35, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            -webkit-text-fill-color: white;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            min-width: 200px;
+            background: rgba(20, 20, 40, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--glass-border);
+            margin: 8px 0;
+        }
+
+        /* ============================================
+           HERO SECTION
+           ============================================ */
+        .hero {
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.8) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            color: var(--text-primary);
+            font-size: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 18px;
+        }
+
+        /* ============================================
+           GAME CATALOG
+           ============================================ */
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 16px;
+        }
+
+        .game-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: slideUp 0.4s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            border-color: var(--primary);
+        }
+
+        .game-card.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .game-logo {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 12px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .game-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .game-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* ============================================
+           CHECKOUT FLOW
+           ============================================ */
+        .checkout-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .checkout-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .checkout-game {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .checkout-game-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .checkout-game-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .checkout-game-name {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* Steps Indicator */
+        .steps-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 30px;
+        }
+
+        .step-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .step-dot.active {
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .step-dot.completed {
+            background: var(--success);
+        }
+
+        .step-line {
+            width: 40px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .step-line.completed {
+            background: var(--success);
+        }
+
+        /* Package Selection */
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .category-tab {
+            padding: 10px 20px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .category-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .package-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        @media (max-width: 400px) {
+            .package-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .package-card {
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .package-card:hover {
+            border-color: var(--primary);
+        }
+
+        .package-card.selected {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.15);
+        }
+
+        .package-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .package-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover {
+            border-color: var(--primary);
+        }
+
+        .payment-method.selected {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.15);
+        }
+
+        .payment-method.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .payment-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .payment-icon.bkash { background: #e2136e; }
+        .payment-icon.nagad { background: #f6921e; }
+        .payment-icon.rocket { background: #8b2f89; }
+
+        .payment-info {
+            flex: 1;
+        }
+
+        .payment-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .payment-number {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .copy-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 18px;
+            padding-top: 16px;
+        }
+
+        /* ============================================
+           USER DASHBOARD
+           ============================================ */
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Order Cards */
+        .order-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .order-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .order-id {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .order-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pending { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .status-processing { background: rgba(99, 102, 241, 0.2); color: var(--primary); }
+        .status-completed { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .status-cancelled { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+
+        .order-details {
+            display: grid;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .order-detail-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .order-note {
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        /* ============================================
+           ADMIN PANEL
+           ============================================ */
+        .admin-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .admin-nav-btn {
+            padding: 10px 20px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .admin-nav-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .admin-section {
+            display: none;
+        }
+
+        .admin-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .admin-stat-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .admin-stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .admin-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .admin-stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Admin Tables */
+        .data-table {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .data-table table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .data-table th {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .data-table td {
+            font-size: 14px;
+        }
+
+        .data-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Admin Action Buttons */
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--text-primary);
+        }
+
+        .action-btn.danger:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        /* File Upload */
+        .file-upload {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px dashed var(--glass-border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary);
+        }
+
+        .file-upload input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-upload-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+            color: var(--text-muted);
+        }
+
+        .file-upload-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .file-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .file-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ============================================
+           MODAL
+           ============================================ */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            width: 100%;
+            max-width: 480px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: rgba(20, 20, 40, 0.98);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            transform: scale(0.9);
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.show .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        /* ============================================
+           AUTH SECTION
+           ============================================ */
+        .auth-container {
+            max-width: 400px;
+            margin: 40px auto;
+        }
+
+        .auth-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(20px);
+        }
+
+        .auth-title {
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .auth-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .auth-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        /* ============================================
+           SETTINGS
+           ============================================ */
+        .settings-section {
+            margin-bottom: 30px;
+        }
+
+        .settings-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .settings-item-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .settings-item-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .settings-item-text h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .settings-item-text p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Admin Trigger (Hidden) */
+        .admin-trigger {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 11px;
+            cursor: default;
+            user-select: none;
+        }
+
+        /* ============================================
+           TOAST NOTIFICATIONS
+           ============================================ */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            left: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        @media (min-width: 480px) {
+            .toast-container {
+                left: auto;
+                width: 360px;
+            }
+        }
+
+        .toast {
+            padding: 16px;
+            background: rgba(20, 20, 40, 0.95);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideUp 0.3s ease;
+            pointer-events: auto;
+        }
+
+        .toast.success { border-left: 4px solid var(--success); }
+        .toast.error { border-left: 4px solid var(--danger); }
+        .toast.warning { border-left: 4px solid var(--warning); }
+        .toast.info { border-left: 4px solid var(--primary); }
+
+        .toast-icon {
+            font-size: 20px;
+        }
+
+        .toast-message {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        /* ============================================
+           MAINTENANCE MODE
+           ============================================ */
+        .maintenance-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--darker);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .maintenance-content h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .maintenance-content p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        /* ============================================
+           EMPTY STATES
+           ============================================ */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* ============================================
+           UTILITIES
+           ============================================ */
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .text-muted { color: var(--text-secondary); }
+        .mb-0 { margin-bottom: 0; }
+        .mb-1 { margin-bottom: 8px; }
+        .mb-2 { margin-bottom: 16px; }
+        .mb-3 { margin-bottom: 24px; }
+        .mt-2 { margin-top: 16px; }
+        .mt-3 { margin-top: 24px; }
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-2 { gap: 16px; }
+    </style>
+</head>
+<body>
+    <!-- Maintenance Overlay -->
+    <div id="maintenanceOverlay" class="maintenance-overlay hidden">
+        <div class="maintenance-content">
+            <div style="font-size: 80px; margin-bottom: 20px;">🔧</div>
+            <h1>Under Maintenance</h1>
+            <p>We are currently upgrading our systems.<br>Please check back soon!</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo" onclick="navigateTo('home')">
+                    <div class="logo-icon">⚡</div>
+                    <span id="siteName">TopUp Centre</span>
+                </div>
+                <div class="nav-actions">
+                    <button class="nav-btn" onclick="navigateTo('home')" title="Home">🏠</button>
+                    <div class="user-menu" id="userMenu">
+                        <!-- Dynamic content based on auth state -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- HOME SECTION -->
+        <section id="section-home" class="section active">
+            <div class="hero">
+                <h1 class="hero-title">Instant Game Top-Up</h1>
+                <p class="hero-subtitle">Fast, secure & reliable gaming credits for all your favorite games</p>
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="gameSearch" placeholder="Search games..." oninput="filterGames()">
+                </div>
+            </div>
+            
+            <div class="section-title">
+                <span>🎮</span>
+                <span>Popular Games</span>
+            </div>
+            
+            <div class="game-grid" id="gameGrid">
+                <!-- Games rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- AUTH SECTION -->
+        <section id="section-auth" class="section">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <h2 class="auth-title">Welcome</h2>
+                    <p class="auth-subtitle">Sign in to continue or create a new account</p>
+                    
+                    <div class="auth-tabs">
+                        <button class="auth-tab active" onclick="switchAuthTab('login')">Sign In</button>
+                        <button class="auth-tab" onclick="switchAuthTab('signup')">Sign Up</button>
+                    </div>
+                    
+                    <!-- Login Form -->
+                    <form id="loginForm" class="auth-form active" onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" class="form-input" id="loginPhone" placeholder="Enter your phone number" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-input" id="loginPassword" placeholder="Enter your password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block btn-lg">Sign In</button>
+                    </form>
+                    
+                    <!-- Signup Form -->
+                    <form id="signupForm" class="auth-form" onsubmit="handleSignup(event)">
+                        <div class="form-group">
+                            <label class="form-label">Full Name *</label>
+                            <input type="text" class="form-input" id="signupName" placeholder="Enter your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone Number *</label>
+                            <input type="tel" class="form-input" id="signupPhone" placeholder="Enter your phone number" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email (Optional)</label>
+                            <input type="email" class="form-input" id="signupEmail" placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password *</label>
+                            <input type="password" class="form-input" id="signupPassword" placeholder="Create a password" required minlength="6">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block btn-lg">Create Account</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHECKOUT SECTION -->
+        <section id="section-checkout" class="section">
+            <div class="checkout-container">
+                <div class="checkout-header">
+                    <button class="back-btn" onclick="goBack()">←</button>
+                    <div class="checkout-game">
+                        <div class="checkout-game-logo" id="checkoutGameLogo">🎮</div>
+                        <div class="checkout-game-name" id="checkoutGameName">Game Name</div>
+                    </div>
+                </div>
+                
+                <div class="steps-indicator">
+                    <div class="step-dot active" id="step1Dot"></div>
+                    <div class="step-line" id="step1Line"></div>
+                    <div class="step-dot" id="step2Dot"></div>
+                    <div class="step-line" id="step2Line"></div>
+                    <div class="step-dot" id="step3Dot"></div>
+                </div>
+                
+                <!-- Step 1: Player Info -->
+                <div id="checkoutStep1" class="glass-card">
+                    <h3 class="mb-2">Player Information</h3>
+                    <div class="form-group">
+                        <label class="form-label">Player ID / UID *</label>
+                        <input type="text" class="form-input" id="playerUID" placeholder="Enter your Player ID">
+                    </div>
+                    <div class="form-group" id="serverSelectGroup">
+                        <label class="form-label">Server / Region</label>
+                        <select class="form-select" id="serverSelect">
+                            <option value="">Select Server</option>
+                            <option value="asia">Asia</option>
+                            <option value="europe">Europe</option>
+                            <option value="na">North America</option>
+                            <option value="sa">South America</option>
+                            <option value="sea">Southeast Asia</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary btn-block" onclick="goToStep(2)">Continue</button>
+                </div>
+                
+                <!-- Step 2: Package Selection -->
+                <div id="checkoutStep2" class="glass-card hidden">
+                    <h3 class="mb-2">Select Package</h3>
+                    <div class="category-tabs" id="categoryTabs">
+                        <!-- Categories rendered dynamically -->
+                    </div>
+                    <div class="package-grid" id="packageGrid">
+                        <!-- Packages rendered dynamically -->
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn btn-secondary" onclick="goToStep(1)">Back</button>
+                        <button class="btn btn-primary" onclick="goToStep(3)" style="float: right;">Continue</button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Payment -->
+                <div id="checkoutStep3" class="glass-card hidden">
+                    <h3 class="mb-2">Payment</h3>
+                    
+                    <div class="order-summary mb-3">
+                        <div class="summary-row">
+                            <span>Package</span>
+                            <span id="summaryPackage">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Player ID</span>
+                            <span id="summaryPlayerID">-</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Total</span>
+                            <span id="summaryTotal">-</span>
+                        </div>
+                    </div>
+                    
+                    <h4 class="mb-2">Select Payment Method</h4>
+                    <div class="payment-methods" id="paymentMethods">
+                        <!-- Payment methods rendered dynamically -->
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Transaction ID *</label>
+                        <input type="text" class="form-input" id="transactionId" placeholder="Enter your transaction ID">
+                    </div>
+                    
+                    <div class="mt-3">
+                        <button class="btn btn-secondary" onclick="goToStep(2)">Back</button>
+                        <button class="btn btn-success" onclick="confirmOrder()" style="float: right;">Confirm Order</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- USER DASHBOARD -->
+        <section id="section-dashboard" class="section">
+            <h2 class="section-title">
+                <span>📊</span>
+                <span>My Dashboard</span>
+            </h2>
+            
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="userTotalOrders">0</div>
+                    <div class="stat-label">Total Orders</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="userTotalSpent">0</div>
+                    <div class="stat-label">Total Spent</div>
+                </div>
+            </div>
+            
+            <h3 class="section-title">
+                <span>📋</span>
+                <span>Order History</span>
+            </h3>
+            
+            <div class="order-list" id="userOrderList">
+                <!-- Orders rendered dynamically -->
+            </div>
+        </section>
+
+        <!-- SETTINGS SECTION -->
+        <section id="section-settings" class="section">
+            <h2 class="section-title">
+                <span>⚙️</span>
+                <span>Settings</span>
+            </h2>
+            
+            <div class="settings-section">
+                <div class="settings-title">Account</div>
+                <div class="settings-item" id="accountSettingsItem">
+                    <div class="settings-item-info">
+                        <div class="settings-item-icon">👤</div>
+                        <div class="settings-item-text">
+                            <h4 id="settingsUserName">Guest</h4>
+                            <p id="settingsUserPhone">Not logged in</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <div class="settings-title">App</div>
+                <div class="settings-item">
+                    <div class="settings-item-info">
+                        <div class="settings-item-icon">ℹ️</div>
+                        <div class="settings-item-text">
+                            <h4>App Version</h4>
+                            <p>v1.0.0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="logoutBtnContainer" class="mt-3 hidden">
+                <button class="btn btn-danger btn-block" onclick="handleLogout()">Sign Out</button>
+            </div>
+            
+            <!-- Admin Trigger (Hidden) -->
+            <div class="admin-trigger" id="adminTrigger" onclick="handleAdminTrigger()">
+                © 2024 TopUp Centre
+            </div>
+        </section>
+
+        <!-- ADMIN LOGIN SECTION -->
+        <section id="section-admin-login" class="section">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <h2 class="auth-title">🔐 Admin Access</h2>
+                    <p class="auth-subtitle">Enter admin credentials to continue</p>
+                    <form onsubmit="handleAdminLogin(event)">
+                        <div class="form-group">
+                            <label class="form-label">Admin Password</label>
+                            <input type="password" class="form-input" id="adminPassword" placeholder="Enter admin password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block btn-lg">Access Admin Panel</button>
+                    </form>
+                    <button class="btn btn-secondary btn-block mt-2" onclick="navigateTo('settings')">Cancel</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ADMIN PANEL -->
+        <section id="section-admin" class="section">
+            <h2 class="section-title">
+                <span>🛡️</span>
+                <span>Admin Panel</span>
+            </h2>
+            
+            <div class="admin-nav">
+                <button class="admin-nav-btn active" onclick="switchAdminTab('dashboard')">Dashboard</button>
+                <button class="admin-nav-btn" onclick="switchAdminTab('orders')">Orders</button>
+                <button class="admin-nav-btn" onclick="switchAdminTab('games')">Games</button>
+                <button class="admin-nav-btn" onclick="switchAdminTab('packages')">Packages</button>
+                <button class="admin-nav-btn" onclick="switchAdminTab('payments')">Payments</button>
+                <button class="admin-nav-btn" onclick="switchAdminTab('system')">System</button>
+            </div>
+            
+            <!-- Admin Dashboard -->
+            <div id="admin-dashboard" class="admin-section active">
+                <div class="admin-stats">
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon" style="background: rgba(99, 102, 241, 0.2); color: var(--primary);">📦</div>
+                        <div class="admin-stat-value" id="adminTotalOrders">0</div>
+                        <div class="admin-stat-label">Total Orders</div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon" style="background: rgba(245, 158, 11, 0.2); color: var(--warning);">⏳</div>
+                        <div class="admin-stat-value" id="adminPendingOrders">0</div>
+                        <div class="admin-stat-label">Pending</div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon" style="background: rgba(16, 185, 129, 0.2); color: var(--success);">✓</div>
+                        <div class="admin-stat-value" id="adminCompletedOrders">0</div>
+                        <div class="admin-stat-label">Completed</div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon" style="background: rgba(236, 72, 153, 0.2); color: var(--secondary);">💰</div>
+                        <div class="admin-stat-value" id="adminTotalRevenue">0</div>
+                        <div class="admin-stat-label">Revenue</div>
+                    </div>
+                </div>
+                
+                <div class="glass-card">
+                    <h3 class="mb-2">🎮 Top Game</h3>
+                    <p id="topGameName" class="text-muted">No orders yet</p>
+                </div>
+            </div>
+            
+            <!-- Admin Orders -->
+            <div id="admin-orders" class="admin-section">
+                <div class="flex items-center justify-between mb-2">
+                    <h3>All Orders</h3>
+                    <select class="form-select" style="width: auto;" id="orderFilter" onchange="renderAdminOrders()">
+                        <option value="all">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="processing">Processing</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div class="data-table glass-card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Game</th>
+                                <th>Package</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminOrdersTable">
+                            <!-- Orders rendered dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Admin Games -->
+            <div id="admin-games" class="admin-section">
+                <div class="flex items-center justify-between mb-2">
+                    <h3>Manage Games</h3>
+                    <button class="btn btn-primary btn-sm" onclick="openGameModal()">+ Add Game</button>
+                </div>
+                <div class="data-table glass-card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Logo</th>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminGamesTable">
+                            <!-- Games rendered dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Admin Packages -->
+            <div id="admin-packages" class="admin-section">
+                <div class="flex items-center justify-between mb-2">
+                    <h3>Manage Packages</h3>
+                    <button class="btn btn-primary btn-sm" onclick="openPackageModal()">+ Add Package</button>
+                </div>
+                <div class="form-group">
+                    <select class="form-select" id="packageGameFilter" onchange="renderAdminPackages()">
+                        <option value="all">All Games</option>
+                        <!-- Games rendered dynamically -->
+                    </select>
+                </div>
+                <div class="data-table glass-card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Game</th>
+                                <th>Category</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminPackagesTable">
+                            <!-- Packages rendered dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Admin Payments -->
+            <div id="admin-payments" class="admin-section">
+                <h3 class="mb-2">Payment Settings</h3>
+                <div class="glass-card">
+                    <div class="form-group">
+                        <div class="flex items-center justify-between">
+                            <label class="form-label mb-0">bKash</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="bkashEnabled" onchange="savePaymentSettings()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <input type="text" class="form-input mt-2" id="bkashNumber" placeholder="bKash Number" onchange="savePaymentSettings()">
+                    </div>
+                    <div class="form-group">
+                        <div class="flex items-center justify-between">
+                            <label class="form-label mb-0">Nagad</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="nagadEnabled" onchange="savePaymentSettings()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <input type="text" class="form-input mt-2" id="nagadNumber" placeholder="Nagad Number" onchange="savePaymentSettings()">
+                    </div>
+                    <div class="form-group">
+                        <div class="flex items-center justify-between">
+                            <label class="form-label mb-0">Rocket</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="rocketEnabled" onchange="savePaymentSettings()">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <input type="text" class="form-input mt-2" id="rocketNumber" placeholder="Rocket Number" onchange="savePaymentSettings()">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Admin System -->
+            <div id="admin-system" class="admin-section">
+                <h3 class="mb-2">System Settings</h3>
+                <div class="glass-card">
+                    <div class="form-group">
+                        <label class="form-label">Site Name</label>
+                        <input type="text" class="form-input" id="systemSiteName" placeholder="Site Name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Currency Symbol</label>
+                        <input type="text" class="form-input" id="systemCurrency" placeholder="৳">
+                    </div>
+                    <div class="form-group">
+                        <div class="flex items-center justify-between">
+                            <label class="form-label mb-0">Maintenance Mode</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="maintenanceMode">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-block" onclick="saveSystemSettings()">Save Settings</button>
+                </div>
+                
+                <h3 class="mb-2 mt-3">Change Admin Password</h3>
+                <div class="glass-card">
+                    <div class="form-group">
+                        <label class="form-label">New Password</label>
+                        <input type="password" class="form-input" id="newAdminPassword" placeholder="New password" minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Confirm Password</label>
+                        <input type="password" class="form-input" id="confirmAdminPassword" placeholder="Confirm password">
+                    </div>
+                    <button class="btn btn-primary btn-block" onclick="changeAdminPassword()">Update Password</button>
+                </div>
+                
+                <button class="btn btn-danger btn-block mt-3" onclick="handleAdminLogout()">Exit Admin Panel</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Game Modal -->
+    <div class="modal-overlay" id="gameModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="gameModalTitle">Add Game</h3>
+                <button class="modal-close" onclick="closeModal('gameModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="gameForm" onsubmit="saveGame(event)">
+                    <input type="hidden" id="gameId">
+                    <div class="form-group">
+                        <label class="form-label">Game Logo</label>
+                        <div class="file-upload" id="gameLogoUpload">
+                            <div class="file-preview hidden" id="gameLogoPreview">
+                                <img src="" alt="Preview" id="gameLogoImg">
+                            </div>
+                            <div class="file-upload-icon" id="gameLogoIcon">📷</div>
+                            <div class="file-upload-text">Click to upload image</div>
+                            <input type="file" accept="image/*" onchange="handleGameLogoUpload(event)">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Game Name *</label>
+                        <input type="text" class="form-input" id="gameName" placeholder="Enter game name" required>
+                    </div>
+                    <div class="form-group">
+                        <div class="flex items-center justify-between">
+                            <label class="form-label mb-0">Enabled</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="gameEnabled" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('gameModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="document.getElementById('gameForm').requestSubmit()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Package Modal -->
+    <div class="modal-overlay" id="packageModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="packageModalTitle">Add Package</h3>
+                <button class="modal-close" onclick="closeModal('packageModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="packageForm" onsubmit="savePackage(event)">
+                    <input type="hidden" id="packageId">
+                    <div class="form-group">
+                        <label class="form-label">Game *</label>
+                        <select class="form-select" id="packageGame" required>
+                            <option value="">Select Game</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Category *</label>
+                        <input type="text" class="form-input" id="packageCategory" placeholder="e.g., UID Top Up, Weekly Pass" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Package Name *</label>
+                        <input type="text" class="form-input" id="packageName" placeholder="e.g., 100 Diamonds" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Price *</label>
+                        <input type="number" class="form-input" id="packagePrice" placeholder="0.00" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <div class="flex items-center justify-between">
+                            <label class="form-label mb-0">Enabled</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="packageEnabled" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('packageModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="document.getElementById('packageForm').requestSubmit()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Modal -->
+    <div class="modal-overlay" id="orderModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Order Details</h3>
+                <button class="modal-close" onclick="closeModal('orderModal')">×</button>
+            </div>
+            <div class="modal-body" id="orderModalBody">
+                <!-- Order details rendered dynamically -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('orderModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        /* ============================================
+           DATA & STATE MANAGEMENT
+           ============================================ */
+        
+        // LocalStorage Keys
+        const KEYS = {
+            USERS: 'topup_users',
+            GAMES: 'topup_games',
+            PACKAGES: 'topup_packages',
+            ORDERS: 'topup_orders',
+            SETTINGS: 'topup_settings',
+            ADMIN: 'topup_admin',
+            CURRENT_USER: 'topup_current_user',
+            ADMIN_LOGGED_IN: 'topup_admin_logged'
+        };
+
+        // Default Settings
+        const DEFAULT_SETTINGS = {
+            siteName: 'TopUp Centre',
+            currency: '৳',
+            maintenance: false,
+            payments: {
+                bkash: { enabled: true, number: '01700000000' },
+                nagad: { enabled: true, number: '01800000000' },
+                rocket: { enabled: false, number: '' }
+            }
+        };
+
+        // Default Admin Password
+        const DEFAULT_ADMIN = {
+            password: 'admin123'
+        };
+
+        // Sample Games (Initial Data)
+        const SAMPLE_GAMES = [
+            { id: 'g1', name: 'Free Fire', logo: '', enabled: true },
+            { id: 'g2', name: 'PUBG Mobile', logo: '', enabled: true },
+            { id: 'g3', name: 'Mobile Legends', logo: '', enabled: true },
+            { id: 'g4', name: 'Call of Duty Mobile', logo: '', enabled: true },
+            { id: 'g5', name: 'Genshin Impact', logo: '', enabled: true },
+            { id: 'g6', name: 'Clash of Clans', logo: '', enabled: true }
+        ];
+
+        // Sample Packages
+        const SAMPLE_PACKAGES = [
+            { id: 'p1', gameId: 'g1', category: 'UID Top Up', name: '100 Diamonds', price: 85, enabled: true },
+            { id: 'p2', gameId: 'g1', category: 'UID Top Up', name: '310 Diamonds', price: 250, enabled: true },
+            { id: 'p3', gameId: 'g1', category: 'UID Top Up', name: '520 Diamonds', price: 420, enabled: true },
+            { id: 'p4', gameId: 'g1', category: 'Weekly Pass', name: 'Weekly Membership', price: 150, enabled: true },
+            { id: 'p5', gameId: 'g1', category: 'Monthly Pass', name: 'Monthly Membership', price: 450, enabled: true },
+            { id: 'p6', gameId: 'g2', category: 'UC Top Up', name: '60 UC', price: 85, enabled: true },
+            { id: 'p7', gameId: 'g2', category: 'UC Top Up', name: '325 UC', price: 400, enabled: true },
+            { id: 'p8', gameId: 'g2', category: 'Royal Pass', name: 'Elite Pass', price: 600, enabled: true },
+            { id: 'p9', gameId: 'g3', category: 'Diamonds', name: '86 Diamonds', price: 100, enabled: true },
+            { id: 'p10', gameId: 'g3', category: 'Diamonds', name: '172 Diamonds', price: 200, enabled: true }
+        ];
+
+        // Application State
+        let state = {
+            currentSection: 'home',
+            previousSection: 'home',
+            selectedGame: null,
+            selectedPackage: null,
+            selectedPayment: null,
+            checkoutStep: 1,
+            adminTriggerCount: 0,
+            tempGameLogo: ''
+        };
+
+        /* ============================================
+           UTILITY FUNCTIONS
+           ============================================ */
+        
+        // LocalStorage Helpers
+        function getData(key) {
+            try {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : null;
+            } catch (e) {
+                console.error('Error reading from localStorage:', e);
+                return null;
+            }
+        }
+
+        function setData(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+                return true;
+            } catch (e) {
+                console.error('Error writing to localStorage:', e);
+                return false;
+            }
+        }
+
+        // Generate Unique ID
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        // Format Currency
+        function formatCurrency(amount) {
+            const settings = getData(KEYS.SETTINGS) || DEFAULT_SETTINGS;
+            return `${settings.currency}${parseFloat(amount).toFixed(2)}`;
+        }
+
+        // Show Toast
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const icons = {
+                success: '✓',
+                error: '✕',
+                warning: '⚠',
+                info: 'ℹ'
+            };
+            
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="toast-icon">${icons[type]}</span>
+                <span class="toast-message">${message}</span>
+            `;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Copy to Clipboard
+        function copyToClipboard(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('Copied to clipboard!', 'success');
+                });
+            } else {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('Copied to clipboard!', 'success');
+            }
+        }
+
+        /* ============================================
+           INITIALIZATION
+           ============================================ */
+        
+        function initApp() {
+            // Initialize data if not exists
+            if (!getData(KEYS.SETTINGS)) {
+                setData(KEYS.SETTINGS, DEFAULT_SETTINGS);
+            }
+            
+            if (!getData(KEYS.ADMIN)) {
+                setData(KEYS.ADMIN, DEFAULT_ADMIN);
+            }
+            
+            if (!getData(KEYS.GAMES)) {
+                setData(KEYS.GAMES, SAMPLE_GAMES);
+            }
+            
+            if (!getData(KEYS.PACKAGES)) {
+                setData(KEYS.PACKAGES, SAMPLE_PACKAGES);
+            }
+            
+            if (!getData(KEYS.USERS)) {
+                setData(KEYS.USERS, []);
+            }
+            
+            if (!getData(KEYS.ORDERS)) {
+                setData(KEYS.ORDERS, []);
+            }
+
+            // Check maintenance mode
+            checkMaintenanceMode();
+
+            // Update UI
+            updateUserMenu();
+            renderGames();
+            updateSettingsUI();
+
+            // Update site name
+            const settings = getData(KEYS.SETTINGS);
+            document.getElementById('siteName').textContent = settings.siteName;
+            document.title = settings.siteName + ' - Premium Game Top-Up';
+        }
+
+        function checkMaintenanceMode() {
+            const settings = getData(KEYS.SETTINGS);
+            const isAdmin = getData(KEYS.ADMIN_LOGGED_IN);
+            
+            if (settings.maintenance && !isAdmin) {
+                document.getElementById('maintenanceOverlay').classList.remove('hidden');
+            } else {
+                document.getElementById('maintenanceOverlay').classList.add('hidden');
+            }
+        }
+
+        /* ============================================
+           NAVIGATION
+           ============================================ */
+        
+        function navigateTo(section) {
+            // Check if user is logged in for protected sections
+            const protectedSections = ['checkout', 'dashboard'];
+            const currentUser = getData(KEYS.CURRENT_USER);
+            
+            if (protectedSections.includes(section) && !currentUser) {
+                state.previousSection = section;
+                navigateTo('auth');
+                showToast('Please sign in to continue', 'warning');
+                return;
+            }
+
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => {
+                s.classList.remove('active');
+            });
+
+            // Show selected section
+            const sectionEl = document.getElementById(`section-${section}`);
+            if (sectionEl) {
+                sectionEl.classList.add('active');
+                state.currentSection = section;
+            }
+
+            // Section-specific renders
+            if (section === 'home') {
+                renderGames();
+            } else if (section === 'dashboard') {
+                renderUserDashboard();
+            } else if (section === 'admin') {
+                renderAdminDashboard();
+            } else if (section === 'settings') {
+                updateSettingsUI();
+            }
+
+            // Close dropdown
+            document.querySelector('.dropdown')?.classList.remove('show');
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function goBack() {
+            if (state.currentSection === 'checkout') {
+                if (state.checkoutStep > 1) {
+                    goToStep(state.checkoutStep - 1);
+                } else {
+                    navigateTo('home');
+                }
+            } else {
+                navigateTo('home');
+            }
+        }
+
+        /* ============================================
+           USER AUTHENTICATION
+           ============================================ */
+        
+        function updateUserMenu() {
+            const userMenu = document.getElementById('userMenu');
+            const currentUser = getData(KEYS.CURRENT_USER);
+            
+            if (currentUser) {
+                const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase().substr(0, 2);
+                userMenu.innerHTML = `
+                    <div class="user-avatar" onclick="toggleDropdown()">${initials}</div>
+                    <div class="dropdown" id="userDropdown">
+                        <div class="dropdown-item" onclick="navigateTo('dashboard')">
+                            <span>📊</span>
+                            <span>My Dashboard</span>
+                        </div>
+                        <div class="dropdown-item" onclick="navigateTo('settings')">
+                            <span>⚙️</span>
+                            <span>Settings</span>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item" onclick="handleLogout()">
+                            <span>🚪</span>
+                            <span>Sign Out</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                userMenu.innerHTML = `
+                    <button class="btn btn-primary btn-sm" onclick="navigateTo('auth')">Sign In</button>
+                `;
+            }
+        }
+
+        function toggleDropdown() {
+            document.getElementById('userDropdown')?.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.user-menu')) {
+                document.querySelector('.dropdown')?.classList.remove('show');
+            }
+        });
+
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            
+            document.querySelector(`.auth-tab:${tab === 'login' ? 'first-child' : 'last-child'}`).classList.add('active');
+            document.getElementById(`${tab}Form`).classList.add('active');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const phone = document.getElementById('loginPhone').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            const users = getData(KEYS.USERS) || [];
+            const user = users.find(u => u.phone === phone && u.password === password);
+            
+            if (user) {
+                setData(KEYS.CURRENT_USER, user);
+                updateUserMenu();
+                showToast('Welcome back, ' + user.name + '!', 'success');
+                
+                // Navigate to previous section or home
+                if (state.previousSection && state.previousSection !== 'auth') {
+                    navigateTo(state.previousSection);
+                    state.previousSection = 'home';
+                } else {
+                    navigateTo('home');
+                }
+            } else {
+                showToast('Invalid phone number or password', 'error');
+            }
+        }
+
+        function handleSignup(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('signupName').value.trim();
+            const phone = document.getElementById('signupPhone').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            
+            const users = getData(KEYS.USERS) || [];
+            
+            // Check if phone already exists
+            if (users.find(u => u.phone === phone)) {
+                showToast('Phone number already registered', 'error');
+                return;
+            }
+            
+            const newUser = {
+                id: generateId(),
+                name,
+                phone,
+                email,
+                password,
+                createdAt: new Date().toISOString()
+            };
+            
+            users.push(newUser);
+            setData(KEYS.USERS, users);
+            setData(KEYS.CURRENT_USER, newUser);
+            
+            updateUserMenu();
+            showToast('Account created successfully!', 'success');
+            
+            // Navigate to previous section or home
+            if (state.previousSection && state.previousSection !== 'auth') {
+                navigateTo(state.previousSection);
+                state.previousSection = 'home';
+            } else {
+                navigateTo('home');
+            }
+        }
+
+        function handleLogout() {
+            localStorage.removeItem(KEYS.CURRENT_USER);
+            updateUserMenu();
+            updateSettingsUI();
+            navigateTo('home');
+            showToast('Signed out successfully', 'info');
+        }
+
+        function updateSettingsUI() {
+            const currentUser = getData(KEYS.CURRENT_USER);
+            const logoutBtn = document.getElementById('logoutBtnContainer');
+            
+            if (currentUser) {
+                document.getElementById('settingsUserName').textContent = currentUser.name;
+                document.getElementById('settingsUserPhone').textContent = currentUser.phone;
+                logoutBtn.classList.remove('hidden');
+            } else {
+                document.getElementById('settingsUserName').textContent = 'Guest';
+                document.getElementById('settingsUserPhone').textContent = 'Not logged in';
+                logoutBtn.classList.add('hidden');
+            }
+        }
+
+        /* ============================================
+           GAME CATALOG
+           ============================================ */
+        
+        function renderGames() {
+            const games = getData(KEYS.GAMES) || [];
+            const searchTerm = document.getElementById('gameSearch')?.value.toLowerCase() || '';
+            
+            const filteredGames = games.filter(g => 
+                g.name.toLowerCase().includes(searchTerm)
+            );
+            
+            const grid = document.getElementById('gameGrid');
+            
+            if (filteredGames.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <div class="empty-icon">🎮</div>
+                        <div class="empty-title">No Games Found</div>
+                        <div class="empty-text">Try a different search term</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = filteredGames.map(game => `
+                <div class="game-card ${game.enabled ? '' : 'disabled'}" onclick="selectGame('${game.id}')">
+                    <div class="game-logo">
+                        ${game.logo ? `<img src="${game.logo}" alt="${game.name}">` : getGameIcon(game.name)}
+                    </div>
+                    <div class="game-name">${game.name}</div>
+                </div>
+            `).join('');
+        }
+
+        function getGameIcon(gameName) {
+            const icons = {
+                'free fire': '🔥',
+                'pubg': '🎯',
+                'mobile legends': '⚔️',
+                'call of duty': '🎖️',
+                'genshin impact': '✨',
+                'clash of clans': '🏰'
+            };
+            
+            const key = Object.keys(icons).find(k => gameName.toLowerCase().includes(k));
+            return icons[key] || '🎮';
+        }
+
+        function filterGames() {
+            renderGames();
+        }
+
+        function selectGame(gameId) {
+            const currentUser = getData(KEYS.CURRENT_USER);
+            if (!currentUser) {
+                state.previousSection = 'checkout';
+                navigateTo('auth');
+                showToast('Please sign in to continue', 'warning');
+                return;
+            }
+            
+            const games = getData(KEYS.GAMES) || [];
+            const game = games.find(g => g.id === gameId);
+            
+            if (!game || !game.enabled) {
+                showToast('This game is currently unavailable', 'error');
+                return;
+            }
+            
+            state.selectedGame = game;
+            state.selectedPackage = null;
+            state.selectedPayment = null;
+            state.checkoutStep = 1;
+            
+            // Update checkout UI
+            document.getElementById('checkoutGameName').textContent = game.name;
+            const logoEl = document.getElementById('checkoutGameLogo');
+            if (game.logo) {
+                logoEl.innerHTML = `<img src="${game.logo}" alt="${game.name}">`;
+            } else {
+                logoEl.innerHTML = getGameIcon(game.name);
+            }
+            
+            // Reset form
+            document.getElementById('playerUID').value = '';
+            document.getElementById('serverSelect').value = '';
+            document.getElementById('transactionId').value = '';
+            
+            navigateTo('checkout');
+            updateCheckoutSteps();
+            renderPackageCategories();
+        }
+
+        /* ============================================
+           CHECKOUT FLOW
+           ============================================ */
+        
+        function goToStep(step) {
+            if (step === 2 && !document.getElementById('playerUID').value.trim()) {
+                showToast('Please enter your Player ID', 'warning');
+                return;
+            }
+            
+            if (step === 3 && !state.selectedPackage) {
+                showToast('Please select a package', 'warning');
+                return;
+            }
+            
+            state.checkoutStep = step;
+            updateCheckoutSteps();
+            
+            if (step === 3) {
+                renderPaymentStep();
+            }
+        }
+
+        function updateCheckoutSteps() {
+            // Hide all steps
+            document.getElementById('checkoutStep1').classList.add('hidden');
+            document.getElementById('checkoutStep2').classList.add('hidden');
+            document.getElementById('checkoutStep3').classList.add('hidden');
+            
+            // Show current step
+            document.getElementById(`checkoutStep${state.checkoutStep}`).classList.remove('hidden');
+            
+            // Update indicators
+            for (let i = 1; i <= 3; i++) {
+                const dot = document.getElementById(`step${i}Dot`);
+                const line = document.getElementById(`step${i}Line`);
+                
+                if (i < state.checkoutStep) {
+                    dot.classList.remove('active');
+                    dot.classList.add('completed');
+                    if (line) line.classList.add('completed');
+                } else if (i === state.checkoutStep) {
+                    dot.classList.add('active');
+                    dot.classList.remove('completed');
+                    if (line) line.classList.remove('completed');
+                } else {
+                    dot.classList.remove('active', 'completed');
+                    if (line) line.classList.remove('completed');
+                }
+            }
+        }
+
+        function renderPackageCategories() {
+            const packages = getData(KEYS.PACKAGES) || [];
+            const gamePackages = packages.filter(p => p.gameId === state.selectedGame.id && p.enabled);
+            
+            // Get unique categories
+            const categories = [...new Set(gamePackages.map(p => p.category))];
+            
+            const tabsContainer = document.getElementById('categoryTabs');
+            
+            if (categories.length === 0) {
+                tabsContainer.innerHTML = '';
+                document.getElementById('packageGrid').innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <div class="empty-icon">📦</div>
+                        <div class="empty-title">No Packages Available</div>
+                        <div class="empty-text">Packages coming soon</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            tabsContainer.innerHTML = categories.map((cat, i) => `
+                <button class="category-tab ${i === 0 ? 'active' : ''}" onclick="selectCategory('${cat}')">${cat}</button>
+            `).join('');
+            
+            // Render first category packages
+            renderPackages(categories[0]);
+        }
+
+        function selectCategory(category) {
+            document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            renderPackages(category);
+        }
+
+        function renderPackages(category) {
+            const packages = getData(KEYS.PACKAGES) || [];
+            const categoryPackages = packages.filter(p => 
+                p.gameId === state.selectedGame.id && 
+                p.category === category && 
+                p.enabled
+            );
+            
+            const grid = document.getElementById('packageGrid');
+            grid.innerHTML = categoryPackages.map(pkg => `
+                <div class="package-card ${state.selectedPackage?.id === pkg.id ? 'selected' : ''}" 
+                     onclick="selectPackage('${pkg.id}')">
+                    <div class="package-name">${pkg.name}</div>
+                    <div class="package-price">${formatCurrency(pkg.price)}</div>
+                </div>
+            `).join('');
+        }
+
+        function selectPackage(packageId) {
+            const packages = getData(KEYS.PACKAGES) || [];
+            state.selectedPackage = packages.find(p => p.id === packageId);
+            
+            // Update UI
+            document.querySelectorAll('.package-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.target.closest('.package-card').classList.add('selected');
+        }
+
+        function renderPaymentStep() {
+            const settings = getData(KEYS.SETTINGS) || DEFAULT_SETTINGS;
+            const payments = settings.payments;
+            
+            // Update summary
+            document.getElementById('summaryPackage').textContent = state.selectedPackage.name;
+            document.getElementById('summaryPlayerID').textContent = document.getElementById('playerUID').value;
+            document.getElementById('summaryTotal').textContent = formatCurrency(state.selectedPackage.price);
+            
+            // Render payment methods
+            const container = document.getElementById('paymentMethods');
+            let html = '';
+            
+            if (payments.bkash.enabled) {
+                html += `
+                    <div class="payment-method ${state.selectedPayment === 'bkash' ? 'selected' : ''}" onclick="selectPayment('bkash')">
+                        <div class="payment-icon bkash">bKash</div>
+                        <div class="payment-info">
+                            <div class="payment-name">bKash</div>
+                            <div class="payment-number">${payments.bkash.number}</div>
+                        </div>
+                        <button class="copy-btn" onclick="event.stopPropagation(); copyToClipboard('${payments.bkash.number}')">Copy</button>
+                    </div>
+                `;
+            }
+            
+            if (payments.nagad.enabled) {
+                html += `
+                    <div class="payment-method ${state.selectedPayment === 'nagad' ? 'selected' : ''}" onclick="selectPayment('nagad')">
+                        <div class="payment-icon nagad">Nagad</div>
+                        <div class="payment-info">
+                            <div class="payment-name">Nagad</div>
+                            <div class="payment-number">${payments.nagad.number}</div>
+                        </div>
+                        <button class="copy-btn" onclick="event.stopPropagation(); copyToClipboard('${payments.nagad.number}')">Copy</button>
+                    </div>
+                `;
+            }
+            
+            if (payments.rocket.enabled) {
+                html += `
+                    <div class="payment-method ${state.selectedPayment === 'rocket' ? 'selected' : ''}" onclick="selectPayment('rocket')">
+                        <div class="payment-icon rocket">Rocket</div>
+                        <div class="payment-info">
+                            <div class="payment-name">Rocket</div>
+                            <div class="payment-number">${payments.rocket.number}</div>
+                        </div>
+                        <button class="copy-btn" onclick="event.stopPropagation(); copyToClipboard('${payments.rocket.number}')">Copy</button>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html || '<p class="text-muted">No payment methods available</p>';
+        }
+
+        function selectPayment(method) {
+            state.selectedPayment = method;
+            
+            document.querySelectorAll('.payment-method').forEach(pm => {
+                pm.classList.remove('selected');
+            });
+            event.target.closest('.payment-method').classList.add('selected');
+        }
+
+        function confirmOrder() {
+            const transactionId = document.getElementById('transactionId').value.trim();
+            
+            if (!state.selectedPayment) {
+                showToast('Please select a payment method', 'warning');
+                return;
+            }
+            
+            if (!transactionId) {
+                showToast('Please enter transaction ID', 'warning');
+                return;
+            }
+            
+            const currentUser = getData(KEYS.CURRENT_USER);
+            const orders = getData(KEYS.ORDERS) || [];
+            
+            const newOrder = {
+                id: 'ORD' + Date.now().toString().slice(-8),
+                userId: currentUser.id,
+                userName: currentUser.name,
+                userPhone: currentUser.phone,
+                gameId: state.selectedGame.id,
+                gameName: state.selectedGame.name,
+                packageId: state.selectedPackage.id,
+                packageName: state.selectedPackage.name,
+                packageCategory: state.selectedPackage.category,
+                price: state.selectedPackage.price,
+                playerUID: document.getElementById('playerUID').value.trim(),
+                server: document.getElementById('serverSelect').value,
+                paymentMethod: state.selectedPayment,
+                transactionId: transactionId,
+                status: 'pending',
+                adminNote: '',
+                userNote: '',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+            
+            orders.unshift(newOrder);
+            setData(KEYS.ORDERS, orders);
+            
+            showToast('Order placed successfully!', 'success');
+            
+            // Reset state
+            state.selectedGame = null;
+            state.selectedPackage = null;
+            state.selectedPayment = null;
+            state.checkoutStep = 1;
+            
+            navigateTo('dashboard');
+        }
+
+        /* ============================================
+           USER DASHBOARD
+           ============================================ */
+        
+        function renderUserDashboard() {
+            const currentUser = getData(KEYS.CURRENT_USER);
+            if (!currentUser) return;
+            
+            const orders = getData(KEYS.ORDERS) || [];
+            const userOrders = orders.filter(o => o.userId === currentUser.id);
+            
+            // Stats
+            const totalOrders = userOrders.length;
+            const totalSpent = userOrders.reduce((sum, o) => sum + (o.status !== 'cancelled' ? o.price : 0), 0);
+            
+            document.getElementById('userTotalOrders').textContent = totalOrders;
+            document.getElementById('userTotalSpent').textContent = formatCurrency(totalSpent);
+            
+            // Order list
+            const container = document.getElementById('userOrderList');
+            
+            if (userOrders.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📋</div>
+                        <div class="empty-title">No Orders Yet</div>
+                        <div class="empty-text">Your order history will appear here</div>
+                        <button class="btn btn-primary mt-2" onclick="navigateTo('home')">Browse Games</button>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = userOrders.map(order => `
+                <div class="order-card">
+                    <div class="order-header">
+                        <span class="order-id">#${order.id}</span>
+                        <span class="order-status status-${order.status}">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span>
+                    </div>
+                    <div class="order-details">
+                        <div class="order-detail-row">
+                            <span>Game</span>
+                            <span>${order.gameName}</span>
+                        </div>
+                        <div class="order-detail-row">
+                            <span>Package</span>
+                            <span>${order.packageName}</span>
+                        </div>
+                        <div class="order-detail-row">
+                            <span>Amount</span>
+                            <span>${formatCurrency(order.price)}</span>
+                        </div>
+                        <div class="order-detail-row">
+                            <span>Date</span>
+                            <span>${new Date(order.createdAt).toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                    ${order.userNote ? `
+                        <div class="order-note">
+                            <strong>Note:</strong> ${order.userNote}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        /* ============================================
+           ADMIN PANEL
+           ============================================ */
+        
+        // Admin Trigger (5 taps on copyright)
+        function handleAdminTrigger() {
+            state.adminTriggerCount++;
+            
+            if (state.adminTriggerCount >= 5) {
+                state.adminTriggerCount = 0;
+                
+                const isAdminLoggedIn = getData(KEYS.ADMIN_LOGGED_IN);
+                if (isAdminLoggedIn) {
+                    navigateTo('admin');
+                } else {
+                    navigateTo('admin-login');
+                }
+            }
+            
+            // Reset after 2 seconds
+            setTimeout(() => {
+                state.adminTriggerCount = 0;
+            }, 2000);
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('adminPassword').value;
+            const admin = getData(KEYS.ADMIN) || DEFAULT_ADMIN;
+            
+            if (password === admin.password) {
+                setData(KEYS.ADMIN_LOGGED_IN, true);
+                showToast('Admin access granted', 'success');
+                navigateTo('admin');
+                renderAdminDashboard();
+            } else {
+                showToast('Invalid admin password', 'error');
+            }
+        }
+
+        function handleAdminLogout() {
+            localStorage.removeItem(KEYS.ADMIN_LOGGED_IN);
+            showToast('Exited admin panel', 'info');
+            navigateTo('settings');
+        }
+
+        function switchAdminTab(tab) {
+            document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(`admin-${tab}`).classList.add('active');
+            
+            // Render tab content
+            switch(tab) {
+                case 'dashboard':
+                    renderAdminDashboard();
+                    break;
+                case 'orders':
+                    renderAdminOrders();
+                    break;
+                case 'games':
+                    renderAdminGames();
+                    break;
+                case 'packages':
+                    renderAdminPackages();
+                    populateGameFilters();
+                    break;
+                case 'payments':
+                    loadPaymentSettings();
+                    break;
+                case 'system':
+                    loadSystemSettings();
+                    break;
+            }
+        }
+
+        function renderAdminDashboard() {
+            const orders = getData(KEYS.ORDERS) || [];
+            const games = getData(KEYS.GAMES) || [];
+            
+            const totalOrders = orders.length;
+            const pendingOrders = orders.filter(o => o.status === 'pending').length;
+            const completedOrders = orders.filter(o => o.status === 'completed').length;
+            const totalRevenue = orders
+                .filter(o => o.status === 'completed')
+                .reduce((sum, o) => sum + o.price, 0);
+            
+            document.getElementById('adminTotalOrders').textContent = totalOrders;
+            document.getElementById('adminPendingOrders').textContent = pendingOrders;
+            document.getElementById('adminCompletedOrders').textContent = completedOrders;
+            document.getElementById('adminTotalRevenue').textContent = formatCurrency(totalRevenue);
+            
+            // Top game
+            const gameOrders = {};
+            orders.forEach(o => {
+                gameOrders[o.gameId] = (gameOrders[o.gameId] || 0) + 1;
+            });
+            
+            const topGameId = Object.keys(gameOrders).sort((a, b) => gameOrders[b] - gameOrders[a])[0];
+            const topGame = games.find(g => g.id === topGameId);
+            document.getElementById('topGameName').textContent = topGame ? `${topGame.name} (${gameOrders[topGameId]} orders)` : 'No orders yet';
+        }
+
+        function renderAdminOrders() {
+            const orders = getData(KEYS.ORDERS) || [];
+            const filter = document.getElementById('orderFilter').value;
+            
+            const filteredOrders = filter === 'all' 
+                ? orders 
+                : orders.filter(o => o.status === filter);
+            
+            const tbody = document.getElementById('adminOrdersTable');
+            
+            if (filteredOrders.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center text-muted" style="padding: 40px;">No orders found</td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = filteredOrders.map(order => `
+                <tr>
+                    <td><strong>#${order.id}</strong></td>
+                    <td>${order.gameName}</td>
+                    <td>${order.packageName}</td>
+                    <td>${formatCurrency(order.price)}</td>
+                    <td>
+                        <span class="order-status status-${order.status}">
+                            ${order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="action-btn" onclick="viewOrder('${order.id}')" title="View">👁️</button>
+                            <button class="action-btn" onclick="updateOrderStatus('${order.id}')" title="Update">✏️</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function viewOrder(orderId) {
+            const orders = getData(KEYS.ORDERS) || [];
+            const order = orders.find(o => o.id === orderId);
+            
+            if (!order) return;
+            
+            const modalBody = document.getElementById('orderModalBody');
+            modalBody.innerHTML = `
+                <div class="order-details">
+                    <div class="order-detail-row">
+                        <span>Order ID</span>
+                        <span><strong>#${order.id}</strong></span>
+                    </div>
+                    <div class="order-detail-row">
+                        <span>Status</span>
+                        <span class="order-status status-${order.status}">${order.status}</span>
+                    </div>
+                    <div class="order-detail-row">
+                        <span>Customer</span>
+                        <span>${order.userName}</span>
+                    </div>
+                    <div class="order-detail-row">
+                        <span>Phone</span>
+                        <span>${order.userPhone}</span>
+                    </div>
+                    <div class="order-detail-row">
+                        <span>Game</span>
+                        <span>${order.gameName}</span>
+                    </div>
+                    <div class="order-detail-row">
+                        <span>Package</span>
+                        <span>${order.packageName}</span>
+                    </div>
+                    <div class="order-detail-row">
+                        <span>Amount</span>
+                        <span>${formatCurrency(order.price)}</span>
+                    </div>
+                    <div class="order-detail-row">
+                        <span>Player UID</span>
+                        <span>${order.playerUID}</span>
+                    </div>
+                    <div class="order-detail-row">
+                        <span>Server</span>
+                        <span>${order.server || 'N/A'}</span>
+                    </div>
+                    <div class="order-detail-row">
+                        <span>Payment</span>
+                        <span>${order.paymentMethod.toUpperCase()}</span>
+                    </div>
+                    <div class="order-detail-row">
+                        <span>Transaction ID</span>
+                        <span>${order.transactionId}</span>
+                    </div>
+                    <div class="order-detail-row">
+                        <span>Date</span>
+                        <span>${new Date(order.createdAt).toLocaleString()}</span>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <label class="form-label">Update Status</label>
+                    <select class="form-select" id="modalOrderStatus">
+                        <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
+                        <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>Processing</option>
+                        <option value="completed" ${order.status === 'completed' ? 'selected' : ''}>Completed</option>
+                        <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                    </select>
+                </div>
+                
+                <div class="form-group mt-2">
+                    <label class="form-label">Admin Note (Private)</label>
+                    <input type="text" class="form-input" id="modalAdminNote" value="${order.adminNote || ''}" placeholder="Internal note">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">User Note (Visible to customer)</label>
+                    <input type="text" class="form-input" id="modalUserNote" value="${order.userNote || ''}" placeholder="Note for customer">
+                </div>
+                
+                <button class="btn btn-primary btn-block mt-2" onclick="saveOrderChanges('${order.id}')">Save Changes</button>
+            `;
+            
+            openModal('orderModal');
+        }
+
+        function saveOrderChanges(orderId) {
+            const orders = getData(KEYS.ORDERS) || [];
+            const index = orders.findIndex(o => o.id === orderId);
+            
+            if (index === -1) return;
+            
+            orders[index].status = document.getElementById('modalOrderStatus').value;
+            orders[index].adminNote = document.getElementById('modalAdminNote').value;
+            orders[index].userNote = document.getElementById('modalUserNote').value;
+            orders[index].updatedAt = new Date().toISOString();
+            
+            setData(KEYS.ORDERS, orders);
+            
+            closeModal('orderModal');
+            renderAdminOrders();
+            showToast('Order updated successfully', 'success');
+        }
+
+        function updateOrderStatus(orderId) {
+            viewOrder(orderId);
+        }
+
+        function renderAdminGames() {
+            const games = getData(KEYS.GAMES) || [];
+            const tbody = document.getElementById('adminGamesTable');
+            
+            tbody.innerHTML = games.map(game => `
+                <tr>
+                    <td>
+                        <div style="width: 40px; height: 40px; border-radius: 8px; overflow: hidden; background: var(--glass-bg); display: flex; align-items: center; justify-content: center;">
+                            ${game.logo ? `<img src="${game.logo}" style="width: 100%; height: 100%; object-fit: cover;">` : getGameIcon(game.name)}
+                        </div>
+                    </td>
+                    <td><strong>${game.name}</strong></td>
+                    <td>
+                        <span class="order-status ${game.enabled ? 'status-completed' : 'status-cancelled'}">
+                            ${game.enabled ? 'Active' : 'Disabled'}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="action-btn" onclick="editGame('${game.id}')" title="Edit">✏️</button>
+                            <button class="action-btn danger" onclick="deleteGame('${game.id}')" title="Delete">🗑️</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function openGameModal(gameId = null) {
+            document.getElementById('gameId').value = '';
+            document.getElementById('gameName').value = '';
+            document.getElementById('gameEnabled').checked = true;
+            document.getElementById('gameLogoPreview').classList.add('hidden');
+            document.getElementById('gameLogoIcon').classList.remove('hidden');
+            state.tempGameLogo = '';
+            
+            document.getElementById('gameModalTitle').textContent = 'Add Game';
+            
+            if (gameId) {
+                const games = getData(KEYS.GAMES) || [];
+                const game = games.find(g => g.id === gameId);
+                
+                if (game) {
+                    document.getElementById('gameId').value = game.id;
+                    document.getElementById('gameName').value = game.name;
+                    document.getElementById('gameEnabled').checked = game.enabled;
+                    document.getElementById('gameModalTitle').textContent = 'Edit Game';
+                    
+                    if (game.logo) {
+                        document.getElementById('gameLogoImg').src = game.logo;
+                        document.getElementById('gameLogoPreview').classList.remove('hidden');
+                        document.getElementById('gameLogoIcon').classList.add('hidden');
+                        state.tempGameLogo = game.logo;
+                    }
+                }
+            }
+            
+            openModal('gameModal');
+        }
+
+        function handleGameLogoUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                state.tempGameLogo = event.target.result;
+                document.getElementById('gameLogoImg').src = event.target.result;
+                document.getElementById('gameLogoPreview').classList.remove('hidden');
+                document.getElementById('gameLogoIcon').classList.add('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveGame(e) {
+            e.preventDefault();
+            
+            const games = getData(KEYS.GAMES) || [];
+            const id = document.getElementById('gameId').value;
+            const name = document.getElementById('gameName').value.trim();
+            const enabled = document.getElementById('gameEnabled').checked;
+            
+            if (id) {
+                // Update existing game
+                const index = games.findIndex(g => g.id === id);
+                if (index !== -1) {
+                    games[index].name = name;
+                    games[index].enabled = enabled;
+                    games[index].logo = state.tempGameLogo;
+                }
+            } else {
+                // Add new game
+                games.push({
+                    id: generateId(),
+                    name,
+                    logo: state.tempGameLogo,
+                    enabled
+                });
+            }
+            
+            setData(KEYS.GAMES, games);
+            closeModal('gameModal');
+            renderAdminGames();
+            renderGames();
+            showToast('Game saved successfully', 'success');
+        }
+
+        function editGame(gameId) {
+            openGameModal(gameId);
+        }
+
+        function deleteGame(gameId) {
+            if (!confirm('Are you sure you want to delete this game? All associated packages will also be affected.')) {
+                return;
+            }
+            
+            let games = getData(KEYS.GAMES) || [];
+            games = games.filter(g => g.id !== gameId);
+            setData(KEYS.GAMES, games);
+            
+            renderAdminGames();
+            renderGames();
+            showToast('Game deleted', 'info');
+        }
+
+        function renderAdminPackages() {
+            const packages = getData(KEYS.PACKAGES) || [];
+            const games = getData(KEYS.GAMES) || [];
+            const filter = document.getElementById('packageGameFilter')?.value || 'all';
+            
+            const filteredPackages = filter === 'all' 
+                ? packages 
+                : packages.filter(p => p.gameId === filter);
+            
+            const tbody = document.getElementById('adminPackagesTable');
+            
+            if (filteredPackages.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center text-muted" style="padding: 40px;">No packages found</td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = filteredPackages.map(pkg => {
+                const game = games.find(g => g.id === pkg.gameId);
+                return `
+                    <tr>
+                        <td>${game?.name || 'Unknown'}</td>
+                        <td>${pkg.category}</td>
+                        <td><strong>${pkg.name}</strong></td>
+                        <td>${formatCurrency(pkg.price)}</td>
+                        <td>
+                            <span class="order-status ${pkg.enabled ? 'status-completed' : 'status-cancelled'}">
+                                ${pkg.enabled ? 'Active' : 'Disabled'}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-btns">
+                                <button class="action-btn" onclick="editPackage('${pkg.id}')" title="Edit">✏️</button>
+                                <button class="action-btn danger" onclick="deletePackage('${pkg.id}')" title="Delete">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function populateGameFilters() {
+            const games = getData(KEYS.GAMES) || [];
+            
+            // Package filter
+            const packageFilter = document.getElementById('packageGameFilter');
+            if (packageFilter) {
+                packageFilter.innerHTML = `
+                    <option value="all">All Games</option>
+                    ${games.map(g => `<option value="${g.id}">${g.name}</option>`).join('')}
+                `;
+            }
+            
+            // Package form game select
+            const packageGame = document.getElementById('packageGame');
+            if (packageGame) {
+                packageGame.innerHTML = `
+                    <option value="">Select Game</option>
+                    ${games.map(g => `<option value="${g.id}">${g.name}</option>`).join('')}
+                `;
+            }
+        }
+
+        function openPackageModal(packageId = null) {
+            populateGameFilters();
+            
+            document.getElementById('packageId').value = '';
+            document.getElementById('packageGame').value = '';
+            document.getElementById('packageCategory').value = '';
+            document.getElementById('packageName').value = '';
+            document.getElementById('packagePrice').value = '';
+            document.getElementById('packageEnabled').checked = true;
+            
+            document.getElementById('packageModalTitle').textContent = 'Add Package';
+            
+            if (packageId) {
+                const packages = getData(KEYS.PACKAGES) || [];
+                const pkg = packages.find(p => p.id === packageId);
+                
+                if (pkg) {
+                    document.getElementById('packageId').value = pkg.id;
+                    document.getElementById('packageGame').value = pkg.gameId;
+                    document.getElementById('packageCategory').value = pkg.category;
+                    document.getElementById('packageName').value = pkg.name;
+                    document.getElementById('packagePrice').value = pkg.price;
+                    document.getElementById('packageEnabled').checked = pkg.enabled;
+                    document.getElementById('packageModalTitle').textContent = 'Edit Package';
+                }
+            }
+            
+            openModal('packageModal');
+        }
+
+        function savePackage(e) {
+            e.preventDefault();
+            
+            const packages = getData(KEYS.PACKAGES) || [];
+            const id = document.getElementById('packageId').value;
+            const gameId = document.getElementById('packageGame').value;
+            const category = document.getElementById('packageCategory').value.trim();
+            const name = document.getElementById('packageName').value.trim();
+            const price = parseFloat(document.getElementById('packagePrice').value);
+            const enabled = document.getElementById('packageEnabled').checked;
+            
+            if (id) {
+                // Update existing package
+                const index = packages.findIndex(p => p.id === id);
+                if (index !== -1) {
+                    packages[index] = { ...packages[index], gameId, category, name, price, enabled };
+                }
+            } else {
+                // Add new package
+                packages.push({
+                    id: generateId(),
+                    gameId,
+                    category,
+                    name,
+                    price,
+                    enabled
+                });
+            }
+            
+            setData(KEYS.PACKAGES, packages);
+            closeModal('packageModal');
+            renderAdminPackages();
+            showToast('Package saved successfully', 'success');
+        }
+
+        function editPackage(packageId) {
+            openPackageModal(packageId);
+        }
+
+        function deletePackage(packageId) {
+            if (!confirm('Are you sure you want to delete this package?')) {
+                return;
+            }
+            
+            let packages = getData(KEYS.PACKAGES) || [];
+            packages = packages.filter(p => p.id !== packageId);
+            setData(KEYS.PACKAGES, packages);
+            
+            renderAdminPackages();
+            showToast('Package deleted', 'info');
+        }
+
+        function loadPaymentSettings() {
+            const settings = getData(KEYS.SETTINGS) || DEFAULT_SETTINGS;
+            const payments = settings.payments;
+            
+            document.getElementById('bkashEnabled').checked = payments.bkash.enabled;
+            document.getElementById('bkashNumber').value = payments.bkash.number;
+            document.getElementById('nagadEnabled').checked = payments.nagad.enabled;
+            document.getElementById('nagadNumber').value = payments.nagad.number;
+            document.getElementById('rocketEnabled').checked = payments.rocket.enabled;
+            document.getElementById('rocketNumber').value = payments.rocket.number;
+        }
+
+        function savePaymentSettings() {
+            const settings = getData(KEYS.SETTINGS) || DEFAULT_SETTINGS;
+            
+            settings.payments = {
+                bkash: {
+                    enabled: document.getElementById('bkashEnabled').checked,
+                    number: document.getElementById('bkashNumber').value
+                },
+                nagad: {
+                    enabled: document.getElementById('nagadEnabled').checked,
+                    number: document.getElementById('nagadNumber').value
+                },
+                rocket: {
+                    enabled: document.getElementById('rocketEnabled').checked,
+                    number: document.getElementById('rocketNumber').value
+                }
+            };
+            
+            setData(KEYS.SETTINGS, settings);
+            showToast('Payment settings saved', 'success');
+        }
+
+        function loadSystemSettings() {
+            const settings = getData(KEYS.SETTINGS) || DEFAULT_SETTINGS;
+            
+            document.getElementById('systemSiteName').value = settings.siteName;
+            document.getElementById('systemCurrency').value = settings.currency;
+            document.getElementById('maintenanceMode').checked = settings.maintenance;
+        }
+
+        function saveSystemSettings() {
+            const settings = getData(KEYS.SETTINGS) || DEFAULT_SETTINGS;
+            
+            settings.siteName = document.getElementById('systemSiteName').value.trim() || 'TopUp Centre';
+            settings.currency = document.getElementById('systemCurrency').value.trim() || '৳';
+            settings.maintenance = document.getElementById('maintenanceMode').checked;
+            
+            setData(KEYS.SETTINGS, settings);
+            
+            // Update UI
+            document.getElementById('siteName').textContent = settings.siteName;
+            document.title = settings.siteName + ' - Premium Game Top-Up';
+            
+            checkMaintenanceMode();
+            showToast('System settings saved', 'success');
+        }
+
+        function changeAdminPassword() {
+            const newPassword = document.getElementById('newAdminPassword').value;
+            const confirmPassword = document.getElementById('confirmAdminPassword').value;
+            
+            if (!newPassword || newPassword.length < 6) {
+                showToast('Password must be at least 6 characters', 'error');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                showToast('Passwords do not match', 'error');
+                return;
+            }
+            
+            const admin = getData(KEYS.ADMIN) || DEFAULT_ADMIN;
+            admin.password = newPassword;
+            setData(KEYS.ADMIN, admin);
+            
+            document.getElementById('newAdminPassword').value = '';
+            document.getElementById('confirmAdminPassword').value = '';
+            
+            showToast('Admin password updated', 'success');
+        }
+
+        /* ============================================
+           MODAL FUNCTIONS
+           ============================================ */
+        
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // Close modal on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.remove('show');
+                }
+            });
+        });
+
+        /* ============================================
+           INITIALIZE APP
+           ============================================ */
+        
+        document.addEventListener('DOMContentLoaded', initApp);
+
+        // Prevent zoom on double tap (for APK)
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            if (now - (window.lastTouchEnd || 0) < 300) {
+                e.preventDefault();
+            }
+            window.lastTouchEnd = now;
+        }, { passive: false });
+    </script>
+
+    <!--
+    ==================================================
+    NOTES FOR HTML-TO-APK USAGE
+    ==================================================
+    
+    1. This app is 100% standalone - no external dependencies
+    2. All data is stored in localStorage (persists in WebView)
+    3. Works offline (images loaded as base64)
+    4. No React/Vue/Angular - pure vanilla JS
+    5. No npm/build tools required
+    
+    WEBVIEW SETTINGS:
+    - Enable JavaScript
+    - Enable DOM Storage (for localStorage)
+    - Enable File Access (for image uploads)
+    
+    DEFAULT ADMIN:
+    - Tap copyright text 5 times to access admin login
+    - Default password: admin123
+    
+    TODO:
+    - Add push notification support (requires native bridge)
+    - Add receipt/order confirmation PDF export
+    - Add order search functionality
+    - Add bulk order status update
+    - Add export data feature for backup
+    
+    ==================================================
+    -->
+</body>
+</html>
